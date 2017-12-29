@@ -8,6 +8,6 @@ The ideas in the repository are either:
 
 Not all of my ideas are here. The really good ones that I'm working that stand to make a lot of money are obviously hidden until I'm ready to announce them.
 
-Feel free to take any of my ideas and build on them if you want. All that I ask is that you **let me know first**(We might be able to work together on this one) and **give me credit**.
+Feel free to take any of my ideas and build on them if you want. All that I ask is that you **let me know first**(We might be able to work together on it) and **give me credit**.
 
 Hit me up by email: ghiliaweld@gmail.com
