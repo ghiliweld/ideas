@@ -12,11 +12,10 @@ The ideas in the repository are either:
 
 Here's how this repository is organized:
 
-ideas repository
-                - idea folder
-                              - idea.md
-                              - progress.md
-                              
+1. ideas repository
+    1. idea folder
+        1. idea.md
+        2. progress.md
 
 **idea.md**: This is where I describe my idea in detail. I talk about the mechanics of it (if it's a game), what problem is being solved and who is the solution meant for. I also share my methodology or how I plan on building if I decide to work on it.
 
