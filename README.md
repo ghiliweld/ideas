@@ -13,11 +13,10 @@ The ideas in the repository are either:
 Here's how this repository is organized:
 
 ideas repository
-                |
-                idea folder
-                          |
-                          idea.md   > This is where I describe my idea and how I plan on building it.
-                          progress.md  > This is where I share my progress on the idea, if I do end up working on it.
+                - idea folder
+                              - idea.md
+                              - progress.md
+                              
 
 **idea.md**: This is where I describe my idea in detail. I talk about the mechanics of it (if it's a game), what problem is being solved and who is the solution meant for. I also share my methodology or how I plan on building if I decide to work on it.
 
@@ -27,7 +26,7 @@ Once I've progressed far enough with an idea, I will be moving the folders to th
 
 ---
 ## Why am I doing this?
-I kinda just felt like doing this :smiley:. However, the more I thought about it, the more I started seeing the benefit in sharing my ideas. 
+I kinda just felt like doing this :smiley:. However, the more I thought about it, the more I started seeing the benefit in sharing my ideas.
 
 There are a few advantages with sharing my ideas on GitHub:
 1. I can get feedback on them and see if there's any flaws in my ideas.
