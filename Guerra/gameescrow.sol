@@ -13,7 +13,6 @@ contract GameEscrow {
     address public gameMaster; // aka me, the one who controls the whole game
 
     enum GameWinner { Challenger, Challenged }
-    GameWinner public winnerEnum;
 
     function gameEscrow() public view {
         gameMaster == msg.sender;
@@ -23,8 +22,7 @@ contract GameEscrow {
         address challenger;
         address challenged;
         uint pool; // Total pool of funds, what will go to the winner
-        address winner;
-        // How do I add an enum inside my struct? Not really familiar with enums...
+        GameWinner winner; // winner is an enum that can either correspond to the challenger or challenged
     }
 
     Game[] public games; // an array of all Games that includes our Game struct
