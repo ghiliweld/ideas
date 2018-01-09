@@ -1,17 +1,16 @@
 pragma solidity 0.4.19;
 
 // @author Ghilia Weldesselasie
-// This contract acts and escrow for the card games
-// It also tracks and manages the gameEscrow
-// Might be split into two contracts later with one inhereting the other
-
+// This contract acts as an escrow for the card games
+// It also tracks and manages the games
+// Might be split into two contracts later with one inheriting the other
 
 contract GameEscrow {
 
     event NewGame(address challenger, address challenged, uint timestamp);
     event GameWon(address winner, uint prizeWon, uint timestamp);
 
-    address public gameMaster;
+    address public gameMaster; // aka me, the one who controls the whole game
 
     enum GameWinner { Challenger, Challenged }
     GameWinner public winnerEnum;
@@ -28,7 +27,7 @@ contract GameEscrow {
         // How do I add an enum inside my struct? Not really familiar with enums...
     }
 
-    Game[] public games;
+    Game[] public games; // an array of all Games that includes our Game struct
 
     mapping (uint => address) public gamerNetwork; //Not really necessary but tracks gamers in the network
     mapping (address => uint) public playerWinnings; // Tracks total winnings per individual players
