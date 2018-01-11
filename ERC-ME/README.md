@@ -11,6 +11,8 @@ ERC-721 token that represents you and your identity. ERC-ME is a digital badge o
 
 Simpler alternative to Civic and the like because your identity is tied to a token instead of an address. A token is a lot easier to transfer. You can easily transfer your profile to a new address in case your wallet were to be compromised or you just feel like using a new wallet. Is this a problem that needs solving? I don't know yet.
 
+However, this could also potentially be very expensive since you would need to pay gas every time you want to make any state changes to your token on the blockchain.
+
 Not my best idea to date but it has the potential to be interesting depending on how it's used.
 
 ## Vision / Use Cases
