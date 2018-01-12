@@ -5,112 +5,121 @@ import "./ERC721.sol";
 contract MyNonFungibleToken is ERC721 {
   /*** CONSTANTS ***/
 
-    string public constant NAME = "MyNonFungibleToken";
-    string public constant SYMBOL = "MNFT";
+    string public constant NAME = "ERC-ME";
+    string public constant SYMBOL = "ME";
 
-    struct Token {
-        address mintedBy;
-        uint64 mintedAt;
+    struct Profile {
+        string name; // Must be unique
+        string handle; // Must be unique
+        uint8 followers; // ** Should this be uint8 ?
+        uint8 followings; // ** Should this be uint8 ?
+        address ownedBy;
+        uint64 bornOn;
     }
 
-    Token[] public tokens;
+    Profile[] public profiles;
 
-    mapping (uint256 => address) public tokenIndexToOwner;
-    mapping (address => uint256) public ownershipTokenCount;
-    mapping (uint256 => address) public tokenIndexToApproved;
+    mapping (uint256 => address) public profileIndexToOwner;
+    mapping (address => uint256) public ownershipProfileCount;
+    mapping (uint256 => address) public profileIndexToApproved; // Why is approval a thing, why is this important?
 
-    event Mint(address owner, uint256 tokenId);
+    event Mint(address owner, uint256 profileId);
 
-    function _owns(address _claimant, uint256 _tokenId) internal view returns (bool) {
-        return tokenIndexToOwner[_tokenId] == _claimant;
+    function _owns(address _claimant, uint256 _profileId) internal view returns (bool) {
+        return profileIndexToOwner[_profileId] == _claimant;
     }
 
-    function _approvedFor(address _claimant, uint256 _tokenId) internal view returns (bool) {
-        return tokenIndexToApproved[_tokenId] == _claimant;
+    function _approvedFor(address _claimant, uint256 _profileId) internal view returns (bool) {
+        return profileIndexToApproved[_profileId] == _claimant;
     }
 
-    function _approve(address _to, uint256 _tokenId) internal {
-        tokenIndexToApproved[_tokenId] = _to;
+    function _approve(address _to, uint256 _profileId) internal {
+        profileIndexToApproved[_profileId] = _to;
 
-        Approval(tokenIndexToOwner[_tokenId], tokenIndexToApproved[_tokenId], _tokenId);
+        Approval(profileIndexToOwner[_profileId], profileIndexToApproved[_profileId], _profileId);
     }
 
-    function _transfer(address _from, address _to, uint256 _tokenId) internal {
-        ownershipTokenCount[_to]++;
-        tokenIndexToOwner[_tokenId] = _to;
+    function _transfer(address _from, address _to, uint256 _profileId) internal {
+        ownershipProfileCount[_to]++;
+        profileIndexToOwner[_profileId] = _to;
 
         if (_from != address(0)) {
-            ownershipTokenCount[_from]--;
-            delete tokenIndexToApproved[_tokenId];
+            ownershipProfileCount[_from]--;
+            delete profileIndexToApproved[_profileId];
         }
 
-        Transfer(_from, _to, _tokenId);
+        Transfer(_from, _to, _profileId);
     }
 
-    function _mint(address _owner) internal returns (uint256 tokenId) {
-        Token memory token = Token({
-            mintedBy: _owner,
-            mintedAt: uint64(now)
+    function _mint(address _owner, string _name, string _handle) internal returns (uint256 profileId) {
+      // ** Should this be changed to storage ?
+        Profile memory profile = Profile({
+            name: _name,
+            handle: _handle,
+            followers: 0,
+            followings: 0,
+            ownedBy: _owner,
+            bornOn: uint64(now)
         });
-        tokenId = tokens.push(token) - 1;
+        profileId = profiles.push(profile) - 1;
 
-        Mint(_owner, tokenId);
+        Mint(_owner, profileId);
 
-        _transfer(0, _owner, tokenId);
+        _transfer(0, _owner, profileId);
     }
 
 
     function totalSupply() public view returns (uint256) {
-        return tokens.length;
+        return profiles.length;
     }
 
     function balanceOf(address _owner) public view returns (uint256) {
-        return ownershipTokenCount[_owner];
+        return ownershipProfileCount[_owner];
     }
 
-    function ownerOf(uint256 _tokenId) external view returns (address owner) {
-        owner = tokenIndexToOwner[_tokenId];
+    function ownerOf(uint256 _profileId) external view returns (address owner) {
+        owner = profileIndexToOwner[_profileId];
 
         require(owner != address(0));
     }
 
-    function approve(address _to, uint256 _tokenId) external {
-        require(_owns(msg.sender, _tokenId));
+    function approve(address _to, uint256 _profileId) external {
+        require(_owns(msg.sender, _profileId));
 
-        _approve(_to, _tokenId);
+        _approve(_to, _profileId);
     }
 
-    function transfer(address _to, uint256 _tokenId) external {
+    function transfer(address _to, uint256 _profileId) external {
         require(_to != address(0));
         require(_to != address(this));
-        require(_owns(msg.sender, _tokenId));
+        require(_owns(msg.sender, _profileId));
 
-        _transfer(msg.sender, _to, _tokenId);
+        _transfer(msg.sender, _to, _profileId);
     }
 
-    function transferFrom(address _from, address _to, uint256 _tokenId) external {
+    function transferFrom(address _from, address _to, uint256 _profileId) external {
         require(_to != address(0));
         require(_to != address(this));
-        require(_approvedFor(msg.sender, _tokenId));
-        require(_owns(_from, _tokenId));
+        require(_approvedFor(msg.sender, _profileId));
+        require(_owns(_from, _profileId));
 
-        _transfer(_from, _to, _tokenId);
+        _transfer(_from, _to, _profileId);
   }
 
-    function tokensOfOwner(address _owner) external view returns (uint256[]) {
+    function profilesOfOwner(address _owner) external view returns (uint256[]) {
         uint256 balance = balanceOf(_owner);
 
         if (balance == 0) {
             return new uint256[](0);
         } else {
             uint256[] memory result = new uint256[](balance);
-            uint256 maxTokenId = totalSupply();
+            uint256 maxprofileId = totalSupply();
             uint256 idx = 0;
 
-            uint256 tokenId;
-            for (tokenId = 1; tokenId <= maxTokenId; tokenId++) {
-                if (tokenIndexToOwner[tokenId] == _owner) {
-                    result[idx] = tokenId;
+            uint256 profileId;
+            for (profileId = 1; profileId <= maxprofileId; profileId++) {
+                if (profileIndexToOwner[profileId] == _owner) {
+                    result[idx] = profileId;
                     idx++;
                 }
             }
@@ -122,14 +131,15 @@ contract MyNonFungibleToken is ERC721 {
 
   /*** OTHER EXTERNAL FUNCTIONS ***/
 
-    function mint() external returns (uint256) {
-        return _mint(msg.sender);
+    function mint(address owner, string name, string handle) external returns (uint256) {
+        return _mint(owner, name, handle);
     }
 
-    function getToken(uint256 _tokenId) external view returns (address mintedBy, uint64 mintedAt) {
-        Token memory token = tokens[_tokenId];
+    function getProfile(uint256 _profileId) external view returns (address ownedBy, uint64 bornOn) {
+        // ** Should memory be changed to storage ?
+        Profile memory profile = profiles[_profileId];
 
-        mintedBy = token.mintedBy;
-        mintedAt = token.mintedAt;
+        ownedBy = profile.ownedBy;
+        bornOn = profile.bornOn;
     }
 }

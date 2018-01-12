@@ -3,7 +3,6 @@ pragma solidity 0.4.19;
 // I completely copied this contract from https://github.com/m0t0k1ch1/ERC721-token-sample
 // Will be making my own modifications to it soon however
 
-
 contract ERC721 {
     // Required methods
     function approve(address _to, uint256 _tokenId) external;
