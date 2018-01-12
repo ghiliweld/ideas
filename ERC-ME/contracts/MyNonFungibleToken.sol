@@ -1,25 +1,6 @@
 pragma solidity 0.4.19;
 
-// I completely copied this contract from https://github.com/m0t0k1ch1/ERC721-token-sample
-// Will be making my own modifications to it soon however
-
-
-contract ERC721 {
-    // Required methods
-    function approve(address _to, uint256 _tokenId) external;
-    function transfer(address _to, uint256 _tokenId) external;
-    function transferFrom(address _from, address _to, uint256 _tokenId) external;
-    function ownerOf(uint256 _tokenId) external view returns (address owner);
-    function totalSupply() public view returns (uint256 total);
-    function balanceOf(address _owner) public view returns (uint256 balance);
-
-
-    // Events
-    event TransferEvent(address from, address to, uint256 tokenId);
-    event Approval(address owner, address approved, uint256 tokenId);
-
-}
-
+import "./ERC721.sol";
 
 contract MyNonFungibleToken is ERC721 {
   /*** CONSTANTS ***/
@@ -32,14 +13,11 @@ contract MyNonFungibleToken is ERC721 {
         uint64 mintedAt;
     }
 
-    Token[] private tokens;
+    Token[] public tokens;
 
     mapping (uint256 => address) public tokenIndexToOwner;
     mapping (address => uint256) public ownershipTokenCount;
     mapping (uint256 => address) public tokenIndexToApproved;
-
-
-  /*** EVENTS ***/
 
     event Mint(address owner, uint256 tokenId);
 
@@ -66,7 +44,7 @@ contract MyNonFungibleToken is ERC721 {
             delete tokenIndexToApproved[_tokenId];
         }
 
-        TransferEvent(_from, _to, _tokenId);
+        Transfer(_from, _to, _tokenId);
     }
 
     function _mint(address _owner) internal returns (uint256 tokenId) {
@@ -81,9 +59,6 @@ contract MyNonFungibleToken is ERC721 {
         _transfer(0, _owner, tokenId);
     }
 
-    function supportsInterface(bytes4 _interfaceID) external view returns (bool) {
-        return ((_interfaceID == InterfaceID_ERC165) || (_interfaceID == InterfaceID_ERC721));
-    }
 
     function totalSupply() public view returns (uint256) {
         return tokens.length;
@@ -120,7 +95,7 @@ contract MyNonFungibleToken is ERC721 {
         require(_owns(_from, _tokenId));
 
         _transfer(_from, _to, _tokenId);
-    }
+  }
 
     function tokensOfOwner(address _owner) external view returns (uint256[]) {
         uint256 balance = balanceOf(_owner);
