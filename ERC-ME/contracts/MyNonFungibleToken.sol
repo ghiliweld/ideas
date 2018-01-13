@@ -24,7 +24,7 @@ contract MyNonFungibleToken is ERC721 {
     mapping (address => uint8) public ownershipProfileCount;
     mapping (uint256 => address) public profileIndexToApproved; // Why is approval a thing, why is this important?
 
-    event Mint(address owner, uint256 profileId);
+    event NewProfile(address owner, uint256 profileId);
 
     function _owns(address _claimant, uint256 _profileId) internal view returns (bool) {
         return profileIndexToOwner[_profileId] == _claimant;
@@ -63,7 +63,7 @@ contract MyNonFungibleToken is ERC721 {
         });
         profileId = profiles.push(profile) - 1;
 
-        Mint(_owner, profileId);
+        NewProfile(_owner, profileId);
 
         _transfer(0, _owner, profileId);
     }
