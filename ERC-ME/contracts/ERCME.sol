@@ -9,6 +9,7 @@ contract ERCME is MyNonFungibleToken {
     address public controller = 0xcfde; // The controller of the contract aka me **not my real address must be changed
 
     event NewFollow(uint256 followingId, uint256 followedId);
+    event NewUnfollow(uint256 unfollowingId, uint256 unfollowedId);
     event NameChange(uint256 profileId, string newName);
     event HandleChange(uint256 profileId, string newHandle);
 
@@ -50,7 +51,7 @@ contract ERCME is MyNonFungibleToken {
         _acceptAndWithdraw(msg.value);
 
         // Mint the profile
-        mint(msg.sender, name, handle);
+        _mint(msg.sender, name, handle);
     }
 
     function newFollow(uint8 followIncrease, uint256 initiatorId, uint256 targetId) external {
@@ -66,6 +67,22 @@ contract ERCME is MyNonFungibleToken {
             profiles[initiatorId].followings++;
             profiles[targetId].followers++;
             NewFollow(initiatorId, targetId);
+        }
+    }
+
+    function newUnfollow(uint8 followDecrease, uint256 initiatorId, uint256 targetId) external {
+        /* Triggered when somebody unfollows another person
+        followDecrease is used when deferred updating is enabled
+        A following is substracted from the initiator and a follower is substracted from the target
+        ** Needs to be further optimized for gas efficiency
+        A for loop is necessary if you want each NewUnfollow event to be triggered for a new unfollowing */
+
+        require(_owns(msg.sender, initiatorId));
+        uint8 memory decrease = followDecrease;
+        for (uint memory i = 1; i <= decrease; i++) {
+            profiles[initiatorId].followings--;
+            profiles[targetId].followers--;
+            NewUnfollow(initiatorId, targetId);
         }
     }
 

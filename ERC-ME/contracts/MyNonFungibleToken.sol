@@ -2,6 +2,7 @@ pragma solidity 0.4.19;
 
 import "./ERC721.sol";
 
+
 contract MyNonFungibleToken is ERC721 {
   /*** CONSTANTS ***/
 
@@ -11,8 +12,8 @@ contract MyNonFungibleToken is ERC721 {
     struct Profile {
         string name; // Must be unique
         string handle; // Must be unique
-        uint32 followers; // ** Should this be uint8 ?
-        uint32 followings; // ** Should this be uint8 ?
+        uint32 followers;
+        uint32 followings;
         address ownedBy;
         uint64 bornOn;
     }
@@ -48,7 +49,7 @@ contract MyNonFungibleToken is ERC721 {
             delete profileIndexToApproved[_profileId];
         }
 
-        Transfer(_from, _to, _profileId);
+        TransferEvent(_from, _to, _profileId);
     }
 
     function _mint(address _owner, string _name, string _handle) internal returns (uint256 profileId) {
@@ -103,7 +104,7 @@ contract MyNonFungibleToken is ERC721 {
         require(_owns(_from, _profileId));
 
         _transfer(_from, _to, _profileId);
-  }
+    }
 
     function profilesOfOwner(address _owner) external view returns (uint256[]) {
         uint256 balance = balanceOf(_owner);
@@ -127,16 +128,10 @@ contract MyNonFungibleToken is ERC721 {
         return result;
     }
 
+    function getProfile(uint256 _profileId) external view returns (string name, string handle, uint32 followers,
+    uint32 followings, address ownedBy, uint64 bornOn) {
 
-  /*** OTHER EXTERNAL FUNCTIONS ***/
-
-    function mint(address owner, string name, string handle) external returns (uint256) {
-        return _mint(owner, name, handle);
-    }
-
-    function getProfile(uint256 _profileId) external view returns (address ownedBy, uint64 bornOn) {
         Profile memory profile = profiles[_profileId];
-
         name = profile.name;
         handle = profile.handle;
         followers = profile.followers;
