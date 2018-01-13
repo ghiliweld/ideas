@@ -11,8 +11,8 @@ contract MyNonFungibleToken is ERC721 {
     struct Profile {
         string name; // Must be unique
         string handle; // Must be unique
-        uint8 followers; // ** Should this be uint8 ?
-        uint8 followings; // ** Should this be uint8 ?
+        uint32 followers; // ** Should this be uint8 ?
+        uint32 followings; // ** Should this be uint8 ?
         address ownedBy;
         uint64 bornOn;
     }
@@ -20,7 +20,7 @@ contract MyNonFungibleToken is ERC721 {
     Profile[] public profiles;
 
     mapping (uint256 => address) public profileIndexToOwner;
-    mapping (address => uint256) public ownershipProfileCount;
+    mapping (address => uint8) public ownershipProfileCount;
     mapping (uint256 => address) public profileIndexToApproved; // Why is approval a thing, why is this important?
 
     event Mint(address owner, uint256 profileId);
@@ -52,7 +52,6 @@ contract MyNonFungibleToken is ERC721 {
     }
 
     function _mint(address _owner, string _name, string _handle) internal returns (uint256 profileId) {
-      // ** Should this be changed to storage ?
         Profile memory profile = Profile({
             name: _name,
             handle: _handle,
@@ -136,9 +135,12 @@ contract MyNonFungibleToken is ERC721 {
     }
 
     function getProfile(uint256 _profileId) external view returns (address ownedBy, uint64 bornOn) {
-        // ** Should memory be changed to storage ?
         Profile memory profile = profiles[_profileId];
 
+        name = profile.name;
+        handle = profile.handle;
+        followers = profile.followers;
+        followings = profile.followings;
         ownedBy = profile.ownedBy;
         bornOn = profile.bornOn;
     }
