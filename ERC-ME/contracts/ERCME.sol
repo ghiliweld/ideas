@@ -4,9 +4,8 @@ import "./MyNonFungibleToken.sol";
 
 
 contract ERCME is MyNonFungibleToken {
-    // ** Do I need a contant variable for my zero, compiler thingy
 
-    address public controller = 0xcfde; // The controller of the contract aka me **not my real address must be changed
+    address public constant CONTROLLER = 0xcfde; // The controller of the contract aka me ** must be changed
 
     event NewFollow(uint256 followingId, uint256 followedId);
     event NewUnfollow(uint256 unfollowingId, uint256 unfollowedId);
@@ -16,7 +15,7 @@ contract ERCME is MyNonFungibleToken {
     function _checkUniqueName(string _name) internal view returns(bool) {
         // Loops through our profiles array to check if the name we want to use is already taken
         for (uint i = 0; i <= profiles.length; i++) {
-            if (_name == profiles[i].name) {
+            if (keccak256(_name) == keccak256(profiles[i].name)) {
                 return false;
             }
         }
@@ -26,7 +25,7 @@ contract ERCME is MyNonFungibleToken {
     function _checkUniqueHandle(string _handle) internal view returns(bool) {
         // Loops through our profiles array to check if the handle we want to use is already taken
         for (uint i = 0; i <= profiles.length; i++) {
-            if (_handle == profiles[i].handle) {
+            if (keccak256(_handle) == keccak256(profiles[i].handle)) {
                 return false;
             }
         }
@@ -35,7 +34,7 @@ contract ERCME is MyNonFungibleToken {
 
     function _acceptAndWithdraw(uint _donation) internal {
         require(_donation == 0);
-        controller.transfer(_donation);
+        CONTROLLER.transfer(_donation);
         /* Profiles are free to create (except for the gas fee),
         but I want to be able to accept donations to the contract.
         Meaning that if someone choose to send some ETH my way, I want to be able to accept it.
@@ -49,12 +48,13 @@ contract ERCME is MyNonFungibleToken {
 
         // Donation logic
         _acceptAndWithdraw(msg.value);
+        // Should I just remove that function and write CONTROLLER.transfer(msg.value); instead?
 
         // Mint the profile
         _mint(msg.sender, name, handle);
     }
 
-    function newFollow(uint8 followIncrease, uint256 initiatorId, uint256 targetId) external {
+    function newFollow(uint followIncrease, uint256 initiatorId, uint256 targetId) external {
         /* Triggered when somebody follows another person
         followIncrease is used when deferred updating is enabled
         A following is added to the initiator and a follower is added to the target
@@ -62,15 +62,15 @@ contract ERCME is MyNonFungibleToken {
         A for loop is necessary if you want each NewFollow event to be triggered for a new following */
 
         require(_owns(msg.sender, initiatorId));
-        uint8 memory increase = followIncrease;
-        for (uint memory i = 1; i <= increase; i++) {
+        uint increase = followIncrease;
+        for (uint i = 1; i <= increase; i++) {
             profiles[initiatorId].followings++;
             profiles[targetId].followers++;
             NewFollow(initiatorId, targetId);
         }
     }
 
-    function newUnfollow(uint8 followDecrease, uint256 initiatorId, uint256 targetId) external {
+    function newUnfollow(uint followDecrease, uint256 initiatorId, uint256 targetId) external {
         /* Triggered when somebody unfollows another person
         followDecrease is used when deferred updating is enabled
         A following is substracted from the initiator and a follower is substracted from the target
@@ -78,8 +78,8 @@ contract ERCME is MyNonFungibleToken {
         A for loop is necessary if you want each NewUnfollow event to be triggered for a new unfollowing */
 
         require(_owns(msg.sender, initiatorId));
-        uint8 memory decrease = followDecrease;
-        for (uint memory i = 1; i <= decrease; i++) {
+        uint decrease = followDecrease;
+        for (uint i = 1; i <= decrease; i++) {
             profiles[initiatorId].followings--;
             profiles[targetId].followers--;
             NewUnfollow(initiatorId, targetId);
