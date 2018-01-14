@@ -1,4 +1,4 @@
-# Guerra Progress
+# Shōgun Progress
 Ghilia Weldesselasie -- <a href='mailto:ghiliaweld@gmail.com'>ghiliaweld@gmail.com</a>
 
 ---
