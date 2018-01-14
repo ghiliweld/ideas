@@ -8,7 +8,7 @@ Ghilia Weldesselasie -- <a href='mailto:ghiliaweld@gmail.com'>ghiliaweld@gmail.c
 **12/01/2018**
 - Started working on ERC-ME smart contracts.
 - The contracts are separated in three: ERC721.sol, MyNonFungibleToken.sol and ERCME.sol.
-- The first two are copied from [this repository], I'll be auditing them later.
+- The first two are copied from [this repository](https://github.com/m0t0k1ch1/ERC721-token-sample), I'll be auditing them later.
 - The last one (ERCME.sol) contains my own custom implementation needed for the ERC-ME platform.
 
 **13/01/2018**
