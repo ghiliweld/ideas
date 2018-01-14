@@ -14,3 +14,7 @@ Ghilia Weldesselasie -- <a href='mailto:ghiliaweld@gmail.com'>ghiliaweld@gmail.c
 **13/01/2018**
 - Completed the three contracts to the best of my ability.
 - Will be awaiting more feature ideas I could implement, otherwise my work is done and all that's left is auditing.
+
+**14/01/2018**
+- I've decided that I've progressed enough on this project to move it to it's own repo.
+- Please stay tuned to the [new repo](https://github.com/ghiliweld/ERC-ME).
