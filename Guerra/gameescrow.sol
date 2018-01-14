@@ -7,14 +7,15 @@ pragma solidity 0.4.19;
 
 contract GameEscrow {
 
-    event NewGame(address challenger, address challenged, uint timestamp);
+    event NewGame(address challenger, address challenged, uint timestamp, uint pool);
     event GameWon(address winner, uint prizeWon, uint timestamp);
 
     address public gameMaster; // aka me, the one who controls the whole game
 
     enum GameWinner { Challenger, Challenged }
 
-    function gameEscrow() public view {
+    // Constructor function
+    function GameEscrow() public view {
         gameMaster == msg.sender;
     }
 
@@ -30,8 +31,17 @@ contract GameEscrow {
     mapping (uint => address) public gamerNetwork; //Not really necessary but tracks gamers in the network
     mapping (address => uint) public playerWinnings; // Tracks total winnings per individual players
 
-    function playGame(address challenger, address challenged, uint timestamp) public payable {
-        NewGame(challenger, challenged, timestamp);
+    function challengerPitch(address challenger) public payable {
+        challenger = msg.sender;
+        challengerPitch = msg.value;
+    }
+
+    function playGame(address challenger, address challenged) public payable {
+        mapping (address => uint) public memory playerPitches; // map of pitches by players
+        // I don't know how to accept payements from two addresses
+        // Will figure out how to solve this
+
+        NewGame(challenger, challenged, timestamp, pool);
     }
 
 }
