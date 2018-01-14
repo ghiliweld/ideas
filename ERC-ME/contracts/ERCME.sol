@@ -1,5 +1,7 @@
 pragma solidity 0.4.19;
 
+// If the code breaks then revert back to version f28db1d
+
 import "./MyNonFungibleToken.sol";
 
 
@@ -32,23 +34,19 @@ contract ERCME is MyNonFungibleToken {
         return true;
     }
 
-    function _acceptAndWithdraw(uint _donation) internal {
-        require(_donation == 0);
-        CONTROLLER.transfer(_donation);
-        /* Profiles are free to create (except for the gas fee),
-        but I want to be able to accept donations to the contract.
-        Meaning that if someone choose to send some ETH my way, I want to be able to accept it.
-         ** Is it possible to accept payments but for it not to be a mandatory part of the operation?
-        i.e. Will the createProfile function still run if ETH is not sent to it ? */
-    }
+    /* Profiles are free to create (except for the gas fee),
+    but I want to be able to accept donations to the contract.
+    Meaning that if someone choose to send some ETH my way, I want to be able to accept it.
+    ** Is it possible to accept payments but for it not to be a mandatory part of the operation?
+    i.e. Will the createProfile function still run if ETH is not sent to it ? */
 
     function createProfile(string name, string handle) external payable {
         require(_checkUniqueName(name));
         require(_checkUniqueHandle(handle));
 
-        // Donation logic
-        _acceptAndWithdraw(msg.value);
-        // Should I just remove that function and write CONTROLLER.transfer(msg.value); instead?
+        // Donation logic // If somebody decides to send a donation along with the function,
+        // let the function accept and send it to my address.
+        CONTROLLER.transfer(msg.value);
 
         // Mint the profile
         _mint(msg.sender, name, handle);
